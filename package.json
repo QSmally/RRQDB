@@ -1,0 +1,28 @@
+{
+  "name": "rrqdb",
+  "version": "0.0.0",
+  "description": "A QDB-powered RRDB",
+  "main": "RRQDB.js",
+  "scripts": {
+    "test": "node Test/Main.js",
+    "debug": "node Test/Main.js -d",
+    "benchmark": "node Benchmark/Main.js",
+    "docs": "gendocs Test/DocConf.json"
+  },
+  "keywords": [
+    "sql",
+    "rrdb",
+    "database"
+  ],
+  "homepage": "https://github.com/QSmally/RRQDB#readme",
+  "repository": "github:QSmally/RRQDB",
+  "author": "QSmally",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/QSmally/RRQDB/issues"
+  },
+  "dependencies": {
+    "qdatabase": "github:QSmally/QDB"
+  },
+  "devDependencies": {}
+}
