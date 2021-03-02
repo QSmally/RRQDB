@@ -74,26 +74,33 @@ class RRQDB extends Connection {
 
         if (Size > this.RROptions.Size) {
             const Batch = super.Select()
-            .Order((a, b) => a._Inserted - b._Inserted)
-            .Limit(this.RROptions.Size)
-            .Keys;
+            .Order((a, b) => b._Inserted - a._Inserted)
+            .Limit(this.RROptions.Size);
 
-            if (Batch.length) {
+            const BatchKeyLenth = Batch.Keys.length;
+            const BatchObject = Batch.AsObject;
+
+            if (BatchKeyLenth) {
                 const T = super.Transaction();
-                for (const Item of Batch) super.Set(`${Item}._Batched`, true);
+                for (const Item in BatchObject) super.Set(Item, {
+                    ...BatchObject[Item],
+                    _Batched: true
+                });
+
                 T.Commit();
             }
 
-            Analytics.Batching = Batch.length;
+            Analytics.Batching = BatchKeyLenth;
         }
 
         if (Size > this.RROptions.Size + this.RROptions.BatchSize) {
             const Batch = super.Select(Item => Item._Batched).Keys;
             super.Erase(...Batch);
             Analytics.Erased = Batch.length;
+            Analytics.Size = super.Size;
+        } else {
+            Analytics.Size = Size;
         }
-
-        Analytics.Size = super.Size;
 
         return Analytics;
     }
@@ -110,7 +117,7 @@ module.exports = RRQDB;
  * @param {Pathlike} Path Path to the database file for a connection.
  * @param {Boolean} Memory Whether or not to instantly fetch everything from the database.
  * @param {Number} Size Maximum size to keep rolling the entries at.
- * @param {Number} BatchSize A value to exceed to archieve in batch, due to performance reasons.
+ * @param {Number} BatchSize A value to exceed to archive in batch, due to performance reasons.
  */
 
 /**
