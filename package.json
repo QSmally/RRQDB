@@ -4,10 +4,7 @@
   "description": "A QDB-powered RRDB",
   "main": "RRQDB.js",
   "scripts": {
-    "test": "node Test/Main.js",
-    "debug": "node Test/Main.js -d",
-    "benchmark": "node Benchmark/Main.js",
-    "docs": "gendocs Test/DocConf.json"
+    "test": "node Test/Test.js"
   },
   "keywords": [
     "sql",
