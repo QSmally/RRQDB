@@ -40,6 +40,17 @@ class RRQDB extends Connection {
             value: RROptions
         });
 
+        /**
+         * Row count cache.
+         * @name RRQDB#_SizeCache
+         * @type {Number?}
+         * @private
+         */
+        Object.defineProperty(this, "_SizeCache", {
+            writable: true,
+            value: super.Size
+        });
+
     }
 
 
@@ -69,8 +80,8 @@ class RRQDB extends Connection {
             _Batched: false
         };
 
-        super.Set(Address, Content);
-        const Size = super.Size;
+        super.Set(Address, Content, true);
+        const Size = ++this._SizeCache;
 
         if (Size > this.RROptions.Size) {
             const Batch = super.Select()
@@ -97,12 +108,26 @@ class RRQDB extends Connection {
             const Batch = super.Select(Item => Item._Batched).Keys;
             super.Erase(...Batch);
             Analytics.Erased = Batch.length;
-            Analytics.Size = super.Size;
+            Analytics.Size = this._SizeCache;
         } else {
             Analytics.Size = Size;
         }
 
         return Analytics;
+    }
+
+
+    // Cache updates
+    Set (Key, Value, _Insert) {
+        super.Set(Key, Value);
+        if (!_Insert) this._SizeCache = super.Size;
+        return this;
+    }
+
+    Erase (...Keys) {
+        super.Erase(...Keys);
+        this._SizeCache = super.Size;
+        return this;
     }
 
 }
