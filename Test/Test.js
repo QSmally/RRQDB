@@ -22,7 +22,7 @@ class TestRRQDB extends RRQDB {
 
             Prepared.run = (...Values) => {
                 for (const Val of Values) S = S.replace("?", `'${Val}'`);
-                console.log(`${this.Table} query:`.padEnd(21), S.replace("\n", "").split(" ").filter(P => !!P).map(P => P.trim()).join(" "));
+                console.log(`${this.Table} query:`.padEnd(21), S);
                 return Runner(...Values);
             }
 
@@ -56,7 +56,7 @@ MyRR.Erase(...MyRR.Indexes);
 console.log("\n\n");
 console.time("RRQDB");
 
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 50; i++) {
     const Address = `${i}`;
     MyRR.Insert(Address, {Foo: "bar"});
 }
