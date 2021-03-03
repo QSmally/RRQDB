@@ -2,6 +2,9 @@
 # Dependencies
 node_modules/
 
+# Tests
+Test/*.qdb
+
 # Miscellaneous
 .DS_Store
 *.zip
