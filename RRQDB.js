@@ -80,7 +80,7 @@ class RRQDB extends Connection {
             _Batched: false
         };
 
-        super.Set(Address, Content, true);
+        super.Set(Address, Content);
         const Size = ++this._SizeCache;
 
         if (Size > this.RROptions.Size) {
@@ -105,8 +105,8 @@ class RRQDB extends Connection {
         }
 
         if (Size > this.RROptions.Size + this.RROptions.BatchSize) {
-            const Batch = super.Select(Item => Item._Batched).Keys;
-            super.Erase(...Batch);
+            const Batch = this.Select(Item => Item._Batched).Keys;
+            this.Erase(...Batch);
             Analytics.Erased = Batch.length;
             Analytics.Size = this._SizeCache;
         } else {
@@ -118,9 +118,9 @@ class RRQDB extends Connection {
 
 
     // Cache updates
-    Set (Key, Value, _Insert) {
+    Set (Key, Value) {
         super.Set(Key, Value);
-        if (!_Insert) this._SizeCache = super.Size;
+        this._SizeCache = super.Size;
         return this;
     }
 
