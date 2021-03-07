@@ -86,6 +86,7 @@ class RRQDB extends Connection {
         if (Size > this.RROptions.Size) {
             const Batch = super.Select()
             .Order((a, b) => b._Inserted - a._Inserted)
+            .Filter(Item => !Item._Batched)
             .Limit(this.RROptions.Size);
 
             const BatchKeyLenth = Batch.Keys.length;
