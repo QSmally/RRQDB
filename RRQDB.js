@@ -77,7 +77,7 @@ class RRQDB extends Connection {
         const Content = {
             ...Document,
             _Inserted: Date.now(),
-            _Batched: false
+            _Batched:  false
         };
 
         super.Set(Address, Content);
